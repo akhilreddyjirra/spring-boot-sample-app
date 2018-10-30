@@ -102,7 +102,7 @@ pipeline {
                                 sh "docker run --hostname dns.mageddo --rm -d --name dns-proxy-server -p 5380:5380 \
                                     -v /var/run/docker.sock:/var/run/docker.sock \
                                     -v /etc/resolv.conf:/etc/resolv.conf \
-                                     defreitas/dns-proxy-serve"
+                                     defreitas/dns-proxy-server"
                                 sh "docker run --name ${APP_NAME} --detach --rm  -p 8080:8080  ${ORG_NAME}/${APP_NAME}:latest"
                                 echo 'the application is deployed !'
                             } else {
