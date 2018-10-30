@@ -8,7 +8,6 @@ pipeline {
         EMAIL_RECIPIENTS = 'akhilreddyjirra@gmail.com'
     }
     stages {
-
         stage('Build with unit testing') {
             steps {
                 // Run the maven build
@@ -72,7 +71,7 @@ pipeline {
                     }
                 }
             }
-        } */
+        } */     
         stage('Build Docker image') {
             steps {
                 script {
@@ -99,6 +98,10 @@ pipeline {
                                 echo "the application is deploying ${jarName}"
                                 // NOTE : CREATE your deployemnt JOB, where it can take parameters whoch is the jar name to fetch from jenkins workspace
                                 // build job: 'ApplicationToDev', parameters: [[$class: 'StringParameterValue', name: 'jarName', value: jarName]]
+                                sh "docker run --hostname dns.mageddo --rm -d --name dns-proxy-server -p 5380:5380 \
+                                    -v /var/run/docker.sock:/var/run/docker.sock \
+                                    -v /etc/resolv.conf:/etc/resolv.conf \
+                                     defreitas/dns-proxy-serve"
                                 sh "docker run --name ${APP_NAME} --detach --rm  -p 8080:8080  ${ORG_NAME}/${APP_NAME}:latest"
                                 echo 'the application is deployed !'
                             } else {
@@ -178,7 +181,7 @@ pipeline {
                                 echo "the application is deploying ${jarName}"
                                 // NOTE : DO NOT FORGET to create your UAT deployment jar , check Job AlertManagerToUAT in Jenkins for reference
                                 // the deployemnt should be based into Nexus repo
-                                build job: 'AApplicationToACC', parameters: [[$class: 'StringParameterValue', name: 'jarName', value: jarName], [$class: 'StringParameterValue', name: 'appVersion', value: releasedVersion]]
+                                //build job: 'AApplicationToACC', parameters: [[$class: 'StringParameterValue', name: 'jarName', value: jarName], [$class: 'StringParameterValue', name: 'appVersion', value: releasedVersion]]
                                 echo 'the application is deployed !'
                             } else {
                                 error 'the application is not  deployed as released version is null!'
@@ -216,6 +219,11 @@ pipeline {
     post {
         // Always runs. And it runs before any of the other post conditions.
         always {
+            script {
+            echo "-=- remove deployment -=-"
+            sh "docker stop ${APP_NAME}"
+            sh "docker stop dns-proxy-server"
+            }
             // Let's wipe out the workspace before we finish!
             deleteDir()
         }
