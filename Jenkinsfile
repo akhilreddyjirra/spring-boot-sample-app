@@ -6,6 +6,7 @@ pipeline {
         ORG_NAME = 'ram'
         APP_NAME = 'sampleapp'
         EMAIL_RECIPIENTS = 'akhilreddyjirra@gmail.com'
+        DOCKER_HOST = 'tcp://localhost:2375'
     }
     stages {
         stage('Build with unit testing') {
