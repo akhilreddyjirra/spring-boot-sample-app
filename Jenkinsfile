@@ -124,7 +124,7 @@ pipeline {
                             script {
                                 def mvnHome = tool 'Maven 3.5.4'
                                 //NOTE : if u change the sanity test class name , change it here as well
-                                sh "'${mvnHome}/bin/mvn' -Dtest=ApplicationSanityCheck_ITT surefire:test -DfailIfNoTests=false"
+                                sh "'${mvnHome}/bin/mvn' -Dtest=ApplicationSanityCheck_ITT surefire:test"
                             }
 
                         }
