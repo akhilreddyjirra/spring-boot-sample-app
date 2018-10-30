@@ -21,7 +21,7 @@ public class ApplicationE2E{
     @Before
     public void setUp() throws Exception {
         // replace that with UAT server host
-        this.baseURL = new URL("http://ampleapp:" + port + "/");
+        this.baseURL = new URL("http://sampleapp:" + port + "/");
         // disable proxy if you wanna run locally
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("userproxy.glb.ebc.local", 8080));
